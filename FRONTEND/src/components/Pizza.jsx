@@ -22,7 +22,7 @@ function Pizza() {
 
   useEffect(() => {
     getPizzaSelect();
-  }, []);
+  }, [id]);
 
   if (pizza === null) {
     return (
