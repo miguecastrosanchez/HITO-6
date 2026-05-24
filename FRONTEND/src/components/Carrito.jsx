@@ -1,115 +1,90 @@
-import napolitana from "../assets/pizzaNAP.jpeg"
-import española from "../assets/piizaESP.jpeg"
-import peperoni from "../assets/pizzaPEP.jpeg"
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
-import Button from 'react-bootstrap/Button';
-import { useState } from "react";
+function Carrito() {
+  
+  const { carrito, agregarPizza, quitarPizza, total } = useContext(CartContext);
+  console.log("CARRITO ACTUAL:", carrito);
 
-
-function Carrito(){
-
-  const [productos,setProductos] = useState([
-    {
-      id: 1,
-      imagen: napolitana,
-      tipo: "Pizza Napolitana",
-      ingredientes: "mozarella, tomates, jamón, orégano",
-      precio: 5950,
-      cantidad:1,
-    },
-    {
-      
-      id: 2,
-      imagen: española,
-      tipo: "Pizza Española",
-      ingredientes: "mozarella, gorgonzola, parmesano, provolone",
-      precio: 6950,
-      cantidad: 1,
-    },
-    {
-      id: 3,
-      imagen: peperoni,
-      tipo: "Pizza Pepperoni",
-      ingredientes: "mozarella, pepperoni, orégano",
-      precio: 6950,
-      cantidad: 1,
-    }
-  ]) 
-
-//FUNCION PARA SUMAR O RESTAR LA CANTIDAD DEL PRODUCTO EN EL CARRITO
-const modificarCantidad = function(operacion,id){
-
-    console.log("Vamnos hacer una operacion " + operacion + " que tiene el id: " + id)
-
-//BUSCAMOS EL PRODUCTO CON EL ID SELECCIONADO
-let productoAmodificar = productos.find(p => p.id === id)
-console.log("producto a modificar: ", productoAmodificar)
-
-if(operacion === "suma"){
-    productoAmodificar.cantidad = productoAmodificar.cantidad + 1
-
-}
-if(operacion === "resta"){
-    productoAmodificar.cantidad = productoAmodificar.cantidad - 1
-}
-console.log(productoAmodificar.cantidad)
-
-let productosActualizados = productos.map((p) =>(p.id === id ? productoAmodificar : p))
-
-
-setProductos(productosActualizados)
-}
-
-//SE RECORRE TODO EL NUEVO ARREGLO Y SE SUMA LOS PRODUCTOS POR LAS CANTIDADES DE CADA PRODUCTO. 
-
-let total = 0;
-for (let producto of productos){
-    total = total + (producto.precio*producto.cantidad)
-}
-
-
-return(
+  return (
     <>
-    <div className="container">
+      <div className="container mt-4">
         <h1>CARRITO DE COMPRAS</h1>
-        <div className="row">
-            <div className="col">
-                <ul>
-                    {productos.map((p,i)=>
-                    <li key={i} className="border rounded mt-2 p-3" style={{listStyle: "none"}}>
-                        <div className="d-flex justify-content-between">
-                            <div>
-                                <img style={{width:"50px"}} src={p.imagen} alt="" /> - {p.tipo} - {p.ingredientes}
-                            </div>
-                            <div>
-                                <button className="btn btn-sm btn-secondary" 
-                                onClick={()=>modificarCantidad("suma",p.id)}>+</button> 
-                                {p.cantidad}
-                                
-                                <button className="btn btn-sm btn-secondary ms-1" 
-                                onClick={()=>modificarCantidad("resta",p.id)}>-</button>
-                                <p>${(p.precio * p.cantidad).toLocaleString()}</p>
-                            </div>
-                        </div>
-                        
-                        
-                        
-                    </li>)}
-                </ul>
-                <div>
-                    <h2>TOTAL:$ {total.toLocaleString()}</h2>
-                </div>
-                
-                <div>
-                    <button className="btn btn-sm btn-secondary">Pagar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    </>
-)
 
+        {carrito.length === 0 ? (
+          <div className="alert alert-warning mt-4">
+            Tu carrito está vacío. Agrega una pizza para comenzar.
+          </div>
+        ) : (
+          <div className="row">
+            <div className="col">
+              <ul className="p-0">
+                {carrito.map((p) => (
+                  <li
+                    key={p.id}
+                    className="border rounded mt-2 p-3"
+                    style={{ listStyle: "none" }}
+                  >
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center gap-3">
+                        <img
+                          style={{
+                            width: "60px",
+                            height: "60px",
+                            objectFit: "cover",
+                            borderRadius: "8px",
+                          }}
+                          src={p.img}
+                          alt={p.name}
+                        />
+
+                        <div>
+                          <h5 className="mb-1">{p.name}</h5>
+                          <p className="mb-0">{p.ingredients.join(", ")}</p>
+                        </div>
+                      </div>
+
+                      <div className="text-end">
+                        <div className="d-flex align-items-center gap-2">
+                          <button
+                            className="btn btn-sm btn-danger"
+                            onClick={() => quitarPizza(p.id)}
+                          >
+                            -
+                          </button>
+
+                          <span className="fw-bold">{p.count}</span>
+
+                          <button
+                            className="btn btn-sm btn-danger"
+                            onClick={() => agregarPizza(p)}
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <p className="mt-2 mb-0 fw-bold">
+                          ${(p.price * p.count).toLocaleString("es-CL")}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="text-end mt-4">
+                <h2>TOTAL: ${total.toLocaleString("es-CL")}</h2>
+              </div>
+
+              <div className="text-end">
+                <button className="btn btn-dark">Pagar</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
 }
 
-export default Carrito
+export default Carrito;

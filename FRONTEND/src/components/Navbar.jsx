@@ -1,13 +1,21 @@
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
+import { useContext } from 'react';
+import { GlobalContext } from '../context/GlobalContext.jsx';
+
+import { CartContext } from '../context/CartContext.jsx';
+
 
 function Navbar(){
 
 let precio = 25000;
 let logeado = false;
 
+const { user, setUser } = useContext(GlobalContext);
+const { total } = useContext(CartContext);
 
+console.log(user);
     return(
         <>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -36,7 +44,7 @@ let logeado = false;
           
         </li>
 
-        {logeado == true ? <li className="nav-item">
+        {user !== null ? <li className="nav-item">
          <Button variant="dark">🔒Profile</Button>
         </li> 
         :  <li className="nav-item">
@@ -47,8 +55,8 @@ let logeado = false;
             
         </li>}
 
-        {logeado == true ? <li className="nav-item">
-         <Button variant="dark">🔒Logout</Button>
+        {user !== null ? <li className="nav-item">
+         <Button variant="dark" onClick={()=> setUser(null)}>🔒Logout</Button>
         </li> 
         :  <li className="nav-item">
          
@@ -61,12 +69,16 @@ let logeado = false;
 
       </ul>
     </div>
-   
+    
+    <span className="text-white fw-bold ms-3">
+    {user !== null ? user.email : "No logeado"}
+    </span>
+
     <div className="Carrito">
         
         <Link to="/Cart" className="nav-link" variant="dark">
         
-        <Button variant="dark">🛒 Total: ${precio.toLocaleString()} 
+        <Button variant="dark">🛒 Total: ${total.toLocaleString()} 
         </Button>
 
         </Link>

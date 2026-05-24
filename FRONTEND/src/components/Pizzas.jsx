@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext.jsx"; 
+
+
 
 
 
 function Pizzas() {
+  
+  const {agregarPizza} = useContext(CartContext);
+  
   const [pizzas, setPizzas] = useState([]);
 
   const getPizzas = async () => {
@@ -74,7 +81,10 @@ function Pizzas() {
                           <Button variant="dark">Ver Más 👀</Button>
                         </Link>
 
-                        <Button variant="dark">Añadir 🛒</Button>
+                        <Button variant="dark" onClick={() => agregarPizza(pizza)}>
+                          Añadir 🛒
+                        </Button>
+                      
                       </div>
                     </div>
                   </div>

@@ -4,11 +4,20 @@ import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom';
+import GlobalProvider from './context/GlobalContext.jsx';
+import CartProvider from './context/CartContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    
+    <GlobalProvider>
+      <CartProvider>
+      <BrowserRouter>
        <App />
-    </BrowserRouter>
+      </BrowserRouter> 
+      </CartProvider>
+      </GlobalProvider>
+
+   
   </StrictMode>,
 )

@@ -39,6 +39,7 @@ return(
     <>
     <section className="Register-section">
         <form action="" className="Register" onSubmit={(e3)=>{validarForm(e3)}}>
+            
             <h2>Formulario de Registro</h2>
             <label htmlFor="Email" >Email</label>
             <br />
